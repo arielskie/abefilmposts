@@ -100,6 +100,32 @@ button:disabled {
     transform: none;
 }
 
+/* Watermark Styling */
+#watermark {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0, 0, 0, 1);
+    padding: 5px 10px;
+    border-radius: 5px;
+   
+}
+
+#watermark img {
+    width: 40px; /* Adjust size */
+    height: auto;
+}
+
+#watermark p {
+    font-size: 14px;
+    color: white;
+    margin: 0;
+}
+
+
     </style>
 
     <script>
@@ -194,6 +220,13 @@ button:disabled {
 <body>
 
     <div id="background-grid"></div>
+
+<!-- Watermark -->
+<div id="watermark">
+    <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjpM8eWbHDGjjjWDDCAsuf2afPfNPTr55-GQ8fVGASf5yYrBv2UB_6CMshJJT_uuU7IKu8RnZKDO0YhFaDYA8lQ9bfcsDet5DM3_EOi4LvwXNlRxRH-zvyEjXjy_Z2CCh-urNB4KBfK8bG6CDY2jJl5Q_vdLOoN7fmEX1Upo6JGxBku2PknlZyR5MldwvrN=w800" alt="Logo">
+    <p>Follow Us</p>
+</div>
+
 
     <h2>Latest Uploads</h2>
     <div class="container">
