@@ -50,17 +50,19 @@
             overflow: auto;
         }
 
-        .columns {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            width: 100%;
-        }
+      .columns {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 90%; /* Reduce width slightly to prevent text from touching edges */
+    margin: 0 auto; /* Center content */
+}
 
-        .column {
-            flex: 1;
-            padding: 30px 10px;
-        }
+.column {
+    flex: 1;
+    padding: 30px 20px; /* Increased left and right padding */
+}
+
 
         h2 {
             text-align: center;
