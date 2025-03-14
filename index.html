@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Short Drama</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background: url('https://img.freepik.com/free-vector/realistic-neon-lights-background_23-2148907367.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        gap: 20px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 10px;
+        max-width: 900px;
+        margin: auto;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      .column {
+        padding: 10px;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      li {
+        font-size: 14px;
+        padding: 3px 0;
+      }
+
+      .buttons {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      button {
+        padding: 5px 10px;
+        margin: 5px;
+        border: 1px solid #333;
+        background: #f4f4f4;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        background: #ddd;
+        cursor: not-allowed;
+      }
+    </style>
+
+    <script>
+        let posts = [];
+        let currentPage = 1;
+        const postsPerPage = 50;
+
+        function fetchPosts(page) {
+            const script = document.createElement("script");
+            script.src = `https://abefilm.asia/feeds/posts/summary?alt=json-in-script&max-results=${postsPerPage}&start-index=${(page - 1) * postsPerPage + 1}&callback=handleBloggerPosts`;
+            document.body.appendChild(script);
+        }
+
+        function handleBloggerPosts(json) {
+            posts = [];
+            if (json.feed.entry) {
+                posts = json.feed.entry.map(post => post.title.$t);
+                displayPosts();
+            } else {
+                document.getElementById("col1").innerHTML = "<li>No posts found.</li>";
+            }
+        }
+
+        function displayPosts() {
+            const col1 = document.getElementById("col1");
+            const col2 = document.getElementById("col2");
+            const col3 = document.getElementById("col3");
+
+            col1.innerHTML = "";
+            col2.innerHTML = "";
+            col3.innerHTML = "";
+
+            let columnCount = [17, 17, 16];
+            let startNumber = (currentPage - 1) * postsPerPage + 1;
+
+            let index = 0;
+            for (let c = 0; c < 3; c++) {
+                for (let i = 0; i < columnCount[c] && index < posts.length; i++, index++) {
+                    const li = document.createElement("li");
+                    li.textContent = `${startNumber + index}. ${posts[index]}`;
+                    if (c === 0) {
+                        col1.appendChild(li);
+                    } else if (c === 1) {
+                        col2.appendChild(li);
+                    } else {
+                        col3.appendChild(li);
+                    }
+                }
+            }
+
+            document.getElementById("prevBtn").disabled = currentPage === 1;
+        }
+
+        function changePage(step) {
+            currentPage += step;
+            document.getElementById("col1").innerHTML = "<li>Loading...</li>";
+            document.getElementById("col2").innerHTML = "";
+            document.getElementById("col3").innerHTML = "";
+            fetchPosts(currentPage);
+        }
+
+        window.onload = () => fetchPosts(currentPage);
+    </script>
+</head>
+<body>
+
+    <h2>Latest Posts</h2>
+    <div class="container">
+        <div class="column">
+            <ul id="col1"></ul>
+        </div>
+        <div class="column">
+            <ul id="col2"></ul>
+        </div>
+        <div class="column">
+            <ul id="col3"></ul>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button id="prevBtn" onclick="changePage(-1)" disabled>Previous</button>
+        <button id="nextBtn" onclick="changePage(1)">Next</button>
+    </div>
+
+</body>
+</html>
