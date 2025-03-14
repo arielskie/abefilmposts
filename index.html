@@ -91,15 +91,32 @@
     gap: 10px;
 }
 
+/* Date Watermark (Top Left) */
+#date-watermark {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 14px;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+/* Logo & Follow Us (Bottom Right) */
 #watermark {
-    position: absolute;
-    right: 100px; /* Adjust as needed */
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
     display: flex;
     align-items: center;
     gap: 5px;
-    background: rgba(0, 0, 0, 1);
+    background: rgba(0, 0, 0, 0.7);
     padding: 5px 10px;
     border-radius: 5px;
+    z-index: 1000;
 }
 
 
@@ -232,9 +249,31 @@
         fetchPosts(currentPage);
     }
 
-    window.onload = () => {
-        fetchPosts(currentPage);
-    };
+
+function updateDateWatermark() {
+    const dateElement = document.getElementById("date-watermark");
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString("en-US", { 
+        year: "numeric", 
+        month: "long", 
+        day: "numeric" 
+    });
+    dateElement.textContent = formattedDate;
+}
+
+// Run function on page load
+window.onload = () => {
+    updateDateWatermark();
+    fetchPosts(currentPage);
+};
+
+
+ window.onload = () => {
+    updateDateWatermark(); // Ensure date updates on load
+    fetchPosts(currentPage);
+};
+
+
 </script>
 
 </head>
@@ -261,10 +300,16 @@
                 <button id="prevBtn" onclick="changePage(-1)" disabled>Previous</button>
                 <button id="nextBtn" onclick="changePage(1)">Next</button>
             </div>
-            <div id="watermark">
-                <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjpM8eWbHDGjjjWDDCAsuf2afPfNPTr55-GQ8fVGASf5yYrBv2UB_6CMshJJT_uuU7IKu8RnZKDO0YhFaDYA8lQ9bfcsDet5DM3_EOi4LvwXNlRxRH-zvyEjXjy_Z2CCh-urNB4KBfK8bG6CDY2jJl5Q_vdLOoN7fmEX1Upo6JGxBku2PknlZyR5MldwvrN=w800" alt="Logo">
-                <p>Follow Us</p>
-            </div>
+         <!-- Date Watermark (Top Left) -->
+<div id="date-watermark"></div>
+
+<!-- Logo & Follow Us (Bottom Right) -->
+<div id="watermark">
+    <img src="https://blogger.googleusercontent.com/img/a/AVvXsEjpM8eWbHDGjjjWDDCAsuf2afPfNPTr55-GQ8fVGASf5yYrBv2UB_6CMshJJT_uuU7IKu8RnZKDO0YhFaDYA8lQ9bfcsDet5DM3_EOi4LvwXNlRxRH-zvyEjXjy_Z2CCh-urNB4KBfK8bG6CDY2jJl5Q_vdLOoN7fmEX1Upo6JGxBku2PknlZyR5MldwvrN=w800" alt="Logo">
+    <p>Follow Us</p>
+</div>
+
+
         </div>
     </div>
 </body>
