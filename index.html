@@ -7,23 +7,45 @@
     <style>
       body {
         font-family: Arial, sans-serif;
-        margin: 20px;
+        margin: 0;
         padding: 0;
-        background: url('https://img.freepik.com/free-vector/realistic-neon-lights-background_23-2148907367.jpg') no-repeat center center fixed;
-        background-size: cover;
+        background: black;
         color: white;
+        overflow-x: hidden;
+      }
+
+      /* Thumbnail collage background */
+      #background-grid {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 2px;
+        z-index: -1;
+      }
+
+      #background-grid div {
+        background-size: cover;
+        background-position: center;
+        transition: opacity 0.5s ease-in-out;
       }
 
       .container {
         display: grid;
         grid-template-columns: auto auto auto;
         gap: 20px;
-        padding: 10px;
+        padding: 20px;
         background: rgba(0, 0, 0, 0.8);
         border-radius: 10px;
         max-width: 900px;
         margin: auto;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
       }
 
       h2 {
@@ -41,27 +63,43 @@
       }
 
       li {
-        font-size: 14px;
+        font-size: 16px;
         padding: 3px 0;
       }
 
-      .buttons {
-        text-align: center;
-        margin-top: 20px;
-      }
+    .buttons {
+    text-align: center;
+    margin-top: 20px;
+}
 
-      button {
-        padding: 5px 10px;
-        margin: 5px;
-        border: 1px solid #333;
-        background: #f4f4f4;
-        cursor: pointer;
-      }
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b); /* Gradient */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(255, 65, 108, 0.5);
+}
 
-      button:disabled {
-        background: #ddd;
-        cursor: not-allowed;
-      }
+button:hover {
+    background: linear-gradient(135deg, #ff4b2b, #ff416c); /* Reverse Gradient */
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(255, 65, 108, 0.7);
+}
+
+button:disabled {
+    background: #444;
+    color: #aaa;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
     </style>
 
     <script>
@@ -78,11 +116,36 @@
         function handleBloggerPosts(json) {
             posts = [];
             if (json.feed.entry) {
-                posts = json.feed.entry.map(post => post.title.$t);
+                posts = json.feed.entry.map(post => ({
+                    title: post.title.$t,
+                    thumbnail: post["media$thumbnail"] ? post["media$thumbnail"].url.replace(/\/s72-c/, "/s800") : null
+                }));
+
+                displayBackgroundThumbnails();
                 displayPosts();
             } else {
                 document.getElementById("col1").innerHTML = "<li>No posts found.</li>";
             }
+        }
+
+        function displayBackgroundThumbnails() {
+            const grid = document.getElementById("background-grid");
+            grid.innerHTML = "";
+
+            let thumbnails = posts
+                .map(post => post.thumbnail)
+                .filter(url => url !== null)
+                .slice(0, 50); // Only take up to 50 thumbnails
+
+            while (thumbnails.length < 50) {
+                thumbnails.push("https://via.placeholder.com/150"); // Fallback placeholder
+            }
+
+            thumbnails.forEach(url => {
+                const div = document.createElement("div");
+                div.style.backgroundImage = `url('${url}')`;
+                grid.appendChild(div);
+            });
         }
 
         function displayPosts() {
@@ -101,7 +164,7 @@
             for (let c = 0; c < 3; c++) {
                 for (let i = 0; i < columnCount[c] && index < posts.length; i++, index++) {
                     const li = document.createElement("li");
-                    li.textContent = `${startNumber + index}. ${posts[index]}`;
+                    li.textContent = `${startNumber + index}. ${posts[index].title}`;
                     if (c === 0) {
                         col1.appendChild(li);
                     } else if (c === 1) {
@@ -123,12 +186,16 @@
             fetchPosts(currentPage);
         }
 
-        window.onload = () => fetchPosts(currentPage);
+        window.onload = () => {
+            fetchPosts(currentPage);
+        };
     </script>
 </head>
 <body>
 
-    <h2>Latest Posts</h2>
+    <div id="background-grid"></div>
+
+    <h2>Latest Uploads</h2>
     <div class="container">
         <div class="column">
             <ul id="col1"></ul>
