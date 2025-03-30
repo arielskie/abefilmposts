@@ -169,7 +169,7 @@
 
     function fetchPosts(page) {
         const script = document.createElement("script");
-        script.src = `https://abefilm.asia/feeds/posts/summary?alt=json-in-script&max-results=${postsPerPage}&start-index=${(page - 1) * postsPerPage + 1}&callback=handleBloggerPosts`;
+        script.src = `https://www.abefilm.asia/feeds/posts/summary?alt=json-in-script&max-results=${postsPerPage}&start-index=${(page - 1) * postsPerPage + 1}&callback=handleBloggerPosts`;
         document.body.appendChild(script);
     }
 
